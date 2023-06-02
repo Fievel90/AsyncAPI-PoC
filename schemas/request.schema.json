@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://www.facile.it/1.0/schemas/example.json",
+  "type": "object",
+  "title": "Request entity definition",
+  "additionalProperties": false,
+  "required": [
+    "uniqueRef",
+    "name",
+    "price"
+  ],
+  "properties": {
+    "uniqueRef": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "price": {
+      "type": "number"
+    }
+  }
+}

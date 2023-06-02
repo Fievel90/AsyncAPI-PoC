@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://www.facile.it/1.0/schemas/example.json",
+  "type": "object",
+  "title": "Response entity definition",
+  "additionalProperties": false,
+  "required": [
+    "username",
+    "cart"
+  ],
+  "properties": {
+    "username": {
+      "type": "string"
+    },
+    "cart": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

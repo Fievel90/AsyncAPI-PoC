@@ -1,0 +1,68 @@
+asyncapi: 2.6.0
+info:
+  title: "Example AsyncAPI"
+  version: 1.0.0
+servers:
+  development:
+    url: amqp://rabbitmq:5672
+    protocol: amqp
+channels:
+  it.facile/ecommerce:
+    subscribe:
+      operationId: "itemBought"
+      summary: "User bought an item"
+      bindings:
+        amqp:
+          is: routingKey
+          exchange:
+            name: ecommerce
+            type: topic
+            durable: true
+            autoDelete: false
+            vhost: /
+          replyTo: ecommerce.reply
+      message:
+        schemaFormat: application/schema+json;version=draft-07
+        contentType: application/json
+        correlationId:
+          location: $message.payload#/uniqueRef
+        payload:
+          $ref: http://schema-registry/schemas/request.schema.json
+    publish:
+      operationId: "itemAdded"
+      summary: "Item added to user's cart"
+      bindings:
+        amqp:
+          is: queue
+          queue:
+            name: ecommerce.reply
+            durable: true
+            exclusive: true
+            autoDelete: false
+            vhost: /
+      message:
+        schemaFormat: application/schema+json;version=draft-07
+        contentType: application/json
+        correlationId:
+          location: $message.payload#/uniqueRef
+        payload:
+          $ref: http://schema-registry/schemas/reply.schema.json
+
+  it.facile/user:
+    subscribe:
+      operationId: "cartUpdated"
+      summary: "User cart updated"
+      bindings:
+        amqp:
+          is: routingKey
+          exchange:
+            name: user
+            type: topic
+            durable: true
+            autoDelete: false
+            vhost: /
+      message:
+        schemaFormat: application/schema+json;version=draft-07
+        contentType: application/json
+        payload:
+          $ref: http://schema-registry/schemas/response.schema.json
