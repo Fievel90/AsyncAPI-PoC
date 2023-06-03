@@ -1,8 +1,8 @@
 x-asyncapi-cli:
   &asyncapi-cli
   build:
-    dockerfile: Dockerfile
     context: ./cli
+    dockerfile: Dockerfile
   entrypoint:
     - 'asyncapi'
   working_dir: /projects

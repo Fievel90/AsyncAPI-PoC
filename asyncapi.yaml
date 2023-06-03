@@ -7,13 +7,14 @@ servers:
     url: amqp://rabbitmq:5672
     protocol: amqp
 channels:
-  it.facile/ecommerce:
+  com.example/ecommerce:
     subscribe:
       operationId: "itemBought"
       summary: "User bought an item"
       bindings:
         amqp:
           is: routingKey
+          x-type: rpc
           exchange:
             name: ecommerce
             type: topic
@@ -34,6 +35,7 @@ channels:
       bindings:
         amqp:
           is: queue
+          x-type: basic
           queue:
             name: ecommerce.reply
             durable: true
@@ -48,13 +50,14 @@ channels:
         payload:
           $ref: http://schema-registry/schemas/reply.schema.json
 
-  it.facile/user:
+  com.example/user:
     subscribe:
       operationId: "cartUpdated"
       summary: "User cart updated"
       bindings:
         amqp:
           is: routingKey
+          x-type: basic
           exchange:
             name: user
             type: topic
