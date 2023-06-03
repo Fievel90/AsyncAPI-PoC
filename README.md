@@ -1,6 +1,6 @@
 # AsyncAPI PoC
 
-Assuming that we want to document our event driven architecture using AsyncAPI specification,
+Assuming that we want to document our event driven architecture using [AsyncAPI](https://www.asyncapi.com) specification,
 this repository was created with the goal to test different generators and review models and templates created.
 
 ## Content
@@ -41,3 +41,14 @@ All available `make` commands:
 * `make gen-models`: generates typescript and PHP models;
 * `make gen-templates`: generates Node.JS and PHP templates;
 * `make apps`: run example apps generated containers;
+
+## Resources
+
+Templates used for service generation:
+* NodeJS Template: https://github.com/asyncapi/nodejs-template
+* PHP Template: https://github.com/asyncapi/php-template
+
+Other common resources:
+* AsyncAPI Website: https://www.asyncapi.com
+* AsyncAPI Models Generator: https://github.com/asyncapi/modelina
+* AsyncAPI Service Generator: https://github.com/asyncapi/generator
