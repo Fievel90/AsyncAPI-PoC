@@ -1,0 +1,92 @@
+x-asyncapi-cli:
+  &asyncapi-cli
+  build:
+    context: ./cli
+    dockerfile: Dockerfile
+  entrypoint:
+    - 'asyncapi'
+  working_dir: /projects
+  volumes:
+    - ./:/projects
+
+services:
+  schema-registry:
+    image: nginx:alpine
+    volumes:
+      - ./schemas:/usr/share/nginx/html/schemas:ro
+    ports:
+      - 0.0.0.0:8080:80
+
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - 0.0.0.0:5672:5672
+      - 0.0.0.0:15672:15672
+
+  studio:
+    <<: *asyncapi-cli
+    command:
+      - 'start'
+      - 'studio'
+      - '--port=3300'
+    ports:
+      - 0.0.0.0:3300:3300
+
+  typescript-models:
+    <<: *asyncapi-cli
+    command:
+      - 'generate'
+      - 'models'
+      - 'typescript'
+      - 'asyncapi.yaml'
+      - '--tsEnumType=union'
+      - '--tsModelType=interface'
+      - '--tsExportType=named'
+      - '--output=./generated/models/typescript'
+    profiles:
+      - models
+    depends_on:
+      - schema-registry
+
+  php-models:
+    <<: *asyncapi-cli
+    command:
+      - 'generate'
+      - 'models'
+      - 'php'
+      - 'asyncapi.yaml'
+      - '--namespace=App'
+      - '--output=./generated/models/php'
+    profiles:
+      - models
+    depends_on:
+      - schema-registry
+
+  nodejs-template:
+    <<: *asyncapi-cli
+    command:
+      - 'generate'
+      - 'fromTemplate'
+      - 'asyncapi.yaml'
+      - '@asyncapi/nodejs-template'
+      - '--param=server=development'
+      - '--output=./generated/templates/nodejs'
+    profiles:
+      - templates
+    depends_on:
+      - schema-registry
+      - rabbitmq
+
+  php-template:
+    <<: *asyncapi-cli
+    command:
+      - 'generate'
+      - 'fromTemplate'
+      - 'asyncapi.yaml'
+      - '@asyncapi/php-template'
+      - '--output=./generated/templates/php'
+    profiles:
+      - templates
+    depends_on:
+      - schema-registry
+      - rabbitmq

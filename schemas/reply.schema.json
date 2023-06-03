@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://www.example.com/1.0/schemas/reply.schema.json",
+  "type": "object",
+  "title": "Reply entity definition",
+  "additionalProperties": false,
+  "required": [
+    "uniqueRef",
+    "status"
+  ],
+  "properties": {
+    "uniqueRef": {
+      "type": "string"
+    },
+    "status": {
+      "enum": ["idle", "pending", "paid"]
+    }
+  }
+}
